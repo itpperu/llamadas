@@ -1,0 +1,21 @@
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'llamadas_db.cache' doesn't exist (Connection: mysql, SQL: delete from `cache`)
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:825
+    821▕                     $this->getName(), $query, $this->prepareBindings($bindings), $e
+    822▕                 );
+    823▕             }
+    824▕ 
+  ➜ 825▕             throw new QueryException(
+    826▕                 $this->getName(), $query, $this->prepareBindings($bindings), $e
+    827▕             );
+    828▕         }
+    829▕     }
+
+      [2m+23 vendor frames [22m
+
+  24  artisan:13
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+

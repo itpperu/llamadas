@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-merged_res-41:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-43:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "com.grabacionllamada.app-merged_res-41:/layout_activity_main.xml.flat",
+        "source": "com.grabacionllamada.app-main-43:/layout/activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-merged_res-41:\\layout_activity_login.xml.flat",
+        "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-43:\\layout\\activity_login.xml"
+    }
+]

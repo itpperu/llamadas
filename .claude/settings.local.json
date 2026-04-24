@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose *)",
+      "Bash(docker exec laravel_mysql *)",
+      "Bash(ipconfig)",
+      "Bash(docker exec laravel_app *)",
+      "Bash(docker exec laravel_nginx *)",
+      "Bash(docker restart laravel_app *)"
+    ]
+  }
+}

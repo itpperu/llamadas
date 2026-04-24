@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+openai-whisper
+setuptools-rust
+ffmpeg-python
+torch
+torchaudio
+python-multipart
