@@ -1,0 +1,31 @@
+# ── Backend Laravel ───────────────────────────────────────────────────────────
+backend/.env
+backend/vendor/
+backend/storage/logs/*.log
+backend/storage/app/audios/
+backend/storage/app/temp/
+backend/storage/app/backups/
+backend/storage/framework/cache/data/
+backend/storage/framework/sessions/
+backend/storage/framework/views/
+backend/bootstrap/cache/*.php
+backend/docker/php/local.ini/
+
+# ── Python AI ─────────────────────────────────────────────────────────────────
+services/python-ai/venv/
+services/python-ai/**/__pycache__/
+services/python-ai/**/*.pyc
+services/python-ai/**/*.pyo
+
+# ── Android ───────────────────────────────────────────────────────────────────
+android-app/.gradle/
+android-app/local.properties
+android-app/app/build/
+android-app/build/
+android-app/.idea/
+
+# ── General ───────────────────────────────────────────────────────────────────
+*.log
+.DS_Store
+Thumbs.db
+*.swp

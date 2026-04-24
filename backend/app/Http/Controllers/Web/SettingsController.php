@@ -31,10 +31,9 @@ class SettingsController extends Controller
         try {
             $baseUrl = str_replace('/process-call', '/', $aiUrl);
             $response = Http::timeout(3)->get($baseUrl);
-            if ($response->successful()) {
-                $aiStatus = true;
-                $aiPingAt = now();
-            }
+            // Cualquier respuesta HTTP (incluso 404) confirma que el servicio está vivo
+            $aiStatus = true;
+            $aiPingAt = now();
         } catch (\Exception $e) {
             Log::error("AIPing failed: " . $e->getMessage());
         }
