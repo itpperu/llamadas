@@ -1,8 +1,11 @@
 package com.grabacionllamada.app.ui.login
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -42,15 +45,61 @@ class LoginActivity : AppCompatActivity() {
 
         setupObservers()
         setupListeners()
+        updateServerLabel()
     }
 
     private fun setupListeners() {
         binding.btnLogin.setOnClickListener {
-            val user = binding.etUsuario.text.toString()
-            val pass = binding.etPassword.text.toString()
-            val device = binding.etDeviceUuid.text.toString()
+            val user   = binding.etUsuario.text.toString().trim()
+            val pass   = binding.etPassword.text.toString()
+            val device = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
             viewModel.login(user, pass, device)
         }
+
+        binding.tvConfigServer.setOnClickListener {
+            showServerDialog()
+        }
+
+        binding.tvVerUuid.setOnClickListener {
+            val uuid = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+            AlertDialog.Builder(this)
+                .setTitle("UUID de este dispositivo")
+                .setMessage("Entrega este código al administrador para que lo registre al crear tu usuario:\n\n$uuid")
+                .setPositiveButton("Copiar") { _, _ ->
+                    val clipboard = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                    clipboard.setPrimaryClip(android.content.ClipData.newPlainText("UUID", uuid))
+                    Toast.makeText(this, "UUID copiado al portapapeles", Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("Cerrar", null)
+                .show()
+        }
+    }
+
+    private fun updateServerLabel() {
+        binding.tvServerUrl.text = "Servidor: ${sessionManager.getServerUrl()}"
+    }
+
+    private fun showServerDialog() {
+        val input = EditText(this).apply {
+            setText(sessionManager.getServerUrl())
+            hint = "https://llamadas.tudominio.com/api/"
+            setPadding(48, 32, 48, 32)
+        }
+        AlertDialog.Builder(this)
+            .setTitle("Configurar servidor")
+            .setView(input)
+            .setPositiveButton("Guardar") { _, _ ->
+                val url = input.text.toString().trim()
+                if (url.startsWith("http")) {
+                    sessionManager.saveServerUrl(url)
+                    // Reiniciar la actividad para que Retrofit use la nueva URL
+                    recreate()
+                } else {
+                    Toast.makeText(this, "URL inválida. Debe comenzar con http:// o https://", Toast.LENGTH_LONG).show()
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 
     private fun setupObservers() {

@@ -5,6 +5,49 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Acciones principales -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="12dp">
+
+        <Button
+            android:id="@+id/btnSyncNow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:text="🔄 Sincronizar"
+            android:backgroundTint="#3700B3"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"/>
+
+        <Button
+            android:id="@+id/btnAttachAudio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:text="🎙️ Asociar Audio"
+            android:backgroundTint="#00897B"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"/>
+
+    </LinearLayout>
+
+    <!-- Estado de sincronización -->
+    <TextView
+        android:id="@+id/tvSyncStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="12sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"/>
+
     <TextView
         android:id="@+id/tvEmptyLog"
         android:layout_width="match_parent"

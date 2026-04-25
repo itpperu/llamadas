@@ -1,17 +1,44 @@
 package com.grabacionllamada.app.workers
 
 import android.content.Context
+import android.content.pm.ServiceInfo
+import android.os.Build
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import androidx.work.Constraints
 import androidx.work.CoroutineWorker
+import androidx.work.ForegroundInfo
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.grabacionllamada.app.GrabacionApp
 import com.grabacionllamada.app.data.api.RetrofitClient
 import com.grabacionllamada.app.data.local.AppDatabase
+import com.grabacionllamada.app.utils.RecordingFinder
 import com.grabacionllamada.app.utils.SessionManager
+import com.grabacionllamada.app.utils.WorkerUtils
+import kotlinx.coroutines.delay
 
 class SyncCallWorker(
     appContext: Context,
     workerParams: WorkerParameters
 ) : CoroutineWorker(appContext, workerParams) {
+
+    override suspend fun getForegroundInfo(): ForegroundInfo {
+        val notification = NotificationCompat.Builder(applicationContext, GrabacionApp.CHANNEL_ID)
+            .setContentTitle("Sincronizando llamada...")
+            .setContentText("Registrando llamada en el servidor")
+            .setSmallIcon(android.R.drawable.ic_menu_send)
+            .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .build()
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(4, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        } else {
+            ForegroundInfo(4, notification)
+        }
+    }
 
     override suspend fun doWork(): Result {
         val sessionManager = SessionManager(applicationContext)
@@ -57,10 +84,40 @@ class SyncCallWorker(
                     val responseBody = response.body()
                     val data = responseBody?.get("data") as? Map<*, *>
                     val remoteId = (data?.get("call_id") as? Double)?.toInt()
-                    
-                    Log.i("SyncCallWorker", "Llamada sincronizada con éxito: ID local ${call.id} -> ID remoto $remoteId")
-                    val updatedCall = call.copy(isMetadataSynced = true, backendCallId = remoteId)
-                    callDao.updateCall(updatedCall)
+
+                    Log.i("SyncCallWorker", "Llamada sincronizada: ID local ${call.id} -> ID remoto $remoteId")
+
+                    // Marcar metadata como sincronizada primero
+                    callDao.updateCall(call.copy(isMetadataSynced = true, backendCallId = remoteId))
+
+                    // Buscar grabación con reintentos — el sistema puede tardar en escribir el archivo
+                    val callEndMillis = try {
+                        java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+                            .parse(call.fechaFin)?.time ?: System.currentTimeMillis()
+                    } catch (e: Exception) { System.currentTimeMillis() }
+
+                    var recordingUri: android.net.Uri? = null
+                    val delays = listOf(8_000L, 15_000L, 30_000L) // 3 intentos: 8s, 15s, 30s
+
+                    for (waitMs in delays) {
+                        delay(waitMs)
+                        Log.d("SyncCallWorker", "Buscando grabación (espera acumulada ${delays.take(delays.indexOf(waitMs) + 1).sum() / 1000}s)...")
+                        recordingUri = RecordingFinder.findRecording(
+                            applicationContext, callEndMillis,
+                            call.duracionSegundos, call.telefonoCliente
+                        )
+                        if (recordingUri != null) break
+                    }
+
+                    if (recordingUri != null) {
+                        Log.i("SyncCallWorker", "Grabación encontrada automáticamente. Encolando subida.")
+                        callDao.updateCall(
+                            callDao.getCallById(call.id)!!.copy(audioPath = recordingUri.toString())
+                        )
+                        WorkerUtils.enqueueSyncAudio(applicationContext)
+                    } else {
+                        Log.w("SyncCallWorker", "Grabación no encontrada tras 3 intentos. Asociación manual requerida.")
+                    }
                 } else {
                     val code = response.code()
                     when (code) {

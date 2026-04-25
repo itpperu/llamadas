@@ -8,6 +8,14 @@
         "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-44:\\drawable\\ic_call_bg.xml"
     },
     {
+        "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-merged_res-42:\\xml_file_paths.xml.flat",
+        "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-44:\\xml\\file_paths.xml"
+    },
+    {
+        "merged": "com.grabacionllamada.app-merged_res-42:/layout_item_call_log.xml.flat",
+        "source": "com.grabacionllamada.app-main-44:/layout/item_call_log.xml"
+    },
+    {
         "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-merged_res-42:\\layout_activity_login.xml.flat",
         "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-44:\\layout\\activity_login.xml"
     },
@@ -20,20 +28,12 @@
         "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-44:\\layout\\fragment_log.xml"
     },
     {
-        "merged": "com.grabacionllamada.app-merged_res-42:/layout_activity_main.xml.flat",
-        "source": "com.grabacionllamada.app-main-44:/layout/activity_main.xml"
-    },
-    {
         "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-merged_res-42:\\drawable_ic_status_bg.xml.flat",
         "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-44:\\drawable\\ic_status_bg.xml"
     },
     {
         "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-merged_res-42:\\drawable_ic_input_bg.xml.flat",
         "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-44:\\drawable\\ic_input_bg.xml"
-    },
-    {
-        "merged": "com.grabacionllamada.app-merged_res-42:/layout_fragment_config.xml.flat",
-        "source": "com.grabacionllamada.app-main-44:/layout/fragment_config.xml"
     },
     {
         "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-merged_res-42:\\layout_fragment_config.xml.flat",

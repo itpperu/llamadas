@@ -1,9 +1,20 @@
 -- Merging decision tree log ---
+provider#androidx.core.content.FileProvider
+INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:41:9-49:20
+	android:grantUriPermissions
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:45:13-47
+	android:authorities
+		INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:43:13-64
+	android:exported
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:44:13-37
+	android:name
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:42:13-62
 manifest
-ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:2:1-45:12
-INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:2:1-45:12
-INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:2:1-45:12
-INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:2:1-45:12
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:2:1-76:12
+INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:2:1-76:12
+INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:2:1-76:12
+INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:2:1-76:12
 MERGED from [androidx.databinding:viewbinding:8.2.2] C:\Users\LAP-M\.gradle\caches\transforms-3\b93974932ecdca12f6bb7955c79b1b88\transformed\viewbinding-8.2.2\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\LAP-M\.gradle\caches\transforms-3\3c6da16fc08c5e7b7caed394bbbfefaa\transformed\material-1.11.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\LAP-M\.gradle\caches\transforms-3\488aad099d5ebc6b5042a6b3b7d174ef\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
@@ -84,9 +95,39 @@ uses-permission#android.permission.READ_CALL_LOG
 ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:9:5-72
 	android:name
 		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:9:22-69
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:10:5-77
+MERGED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:26:5-77
+MERGED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:26:5-77
+	android:name
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:10:22-74
+uses-permission#android.permission.FOREGROUND_SERVICE_DATA_SYNC
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:11:5-87
+	android:name
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:11:22-84
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:12:5-77
+	android:name
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:12:22-74
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:13:5-81
+MERGED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:25:5-81
+MERGED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:25:5-81
+	android:name
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:13:22-78
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:14:5-107
+	android:maxSdkVersion
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:14:78-104
+	android:name
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:14:22-77
+uses-permission#android.permission.READ_MEDIA_AUDIO
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:15:5-75
+	android:name
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:15:22-72
 application
-ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:11:5-44:19
-INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:11:5-44:19
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:17:5-75:19
+INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:17:5-75:19
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\LAP-M\.gradle\caches\transforms-3\3c6da16fc08c5e7b7caed394bbbfefaa\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\LAP-M\.gradle\caches\transforms-3\3c6da16fc08c5e7b7caed394bbbfefaa\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\LAP-M\.gradle\caches\transforms-3\488aad099d5ebc6b5042a6b3b7d174ef\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -112,57 +153,87 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\LAP-M\.gradle\cach
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.12.0] C:\Users\LAP-M\.gradle\caches\transforms-3\440a64c1659b3784956be1ef27019da1\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:17:9-35
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:23:9-35
 	android:label
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:15:9-41
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:21:9-41
 	android:roundIcon
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:16:9-63
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:22:9-63
 	android:icon
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:14:9-58
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:20:9-58
 	android:allowBackup
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:13:9-35
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:19:9-35
 	android:theme
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:18:9-54
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:24:9-54
 	android:usesCleartextTraffic
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:19:9-44
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:25:9-44
 	android:name
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:12:9-37
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:18:9-37
 activity#com.grabacionllamada.app.ui.login.LoginActivity
-ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:21:9-28:20
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:27:9-34:20
 	android:exported
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:23:13-36
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:29:13-36
 	android:name
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:22:13-51
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:28:13-51
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:24:13-27:29
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:30:13-33:29
 action#android.intent.action.MAIN
-ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:25:17-69
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:31:17-69
 	android:name
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:25:25-66
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:31:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:26:17-77
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:32:17-77
 	android:name
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:26:27-74
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:32:27-74
 activity#com.grabacionllamada.app.ui.main.MainActivity
-ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:30:9-32:40
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:36:9-38:40
 	android:exported
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:32:13-37
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:38:13-37
 	android:name
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:31:13-49
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:37:13-49
 receiver#com.grabacionllamada.app.receivers.PhoneStateReceiver
-ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:35:9-42:20
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:51:9-58:20
 	android:enabled
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:37:13-35
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:53:13-35
 	android:exported
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:38:13-36
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:54:13-36
 	android:name
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:36:13-57
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:52:13-57
 intent-filter#action:name:android.intent.action.PHONE_STATE
-ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:39:13-41:29
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:55:13-57:29
 action#android.intent.action.PHONE_STATE
-ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:40:17-76
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:56:17-76
 	android:name
-		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:40:25-73
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:56:25-73
+receiver#com.grabacionllamada.app.receivers.BootReceiver
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:60:9-67:20
+	android:enabled
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:62:13-35
+	android:exported
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:63:13-36
+	android:name
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:61:13-51
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:64:13-66:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:65:17-79
+	android:name
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:65:25-76
+service#com.grabacionllamada.app.services.CallMonitorService
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:69:9-73:56
+	android:enabled
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:71:13-35
+	android:exported
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:72:13-37
+	android:foregroundServiceType
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:73:13-53
+	android:name
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:70:13-56
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:46:13-48:54
+	android:resource
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:48:17-51
+	android:name
+		ADDED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml:47:17-67
 uses-sdk
 INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\xampp\htdocs\grabacion_llamada\android-app\app\src\main\AndroidManifest.xml
@@ -305,14 +376,6 @@ uses-permission#android.permission.WAKE_LOCK
 ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:23:5-68
 	android:name
 		ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:23:22-65
-uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
-ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:25:5-81
-	android:name
-		ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:25:22-78
-uses-permission#android.permission.FOREGROUND_SERVICE
-ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:26:5-77
-	android:name
-		ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:26:22-74
 meta-data#androidx.work.WorkManagerInitializer
 ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:34:13-36:52
 	android:value
@@ -471,10 +534,6 @@ ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\tran
 		ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:111:13-88
 intent-filter#action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.TIMEZONE_CHANGED+action:name:android.intent.action.TIME_SET
 ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:116:13-120:29
-action#android.intent.action.BOOT_COMPLETED
-ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:117:17-79
-	android:name
-		ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:117:25-76
 action#android.intent.action.TIME_SET
 ADDED from [androidx.work:work-runtime:2.9.0] C:\Users\LAP-M\.gradle\caches\transforms-3\e5a20f1fc905537ac2a8b3c08e5cd9c7\transformed\work-runtime-2.9.0\AndroidManifest.xml:118:17-73
 	android:name

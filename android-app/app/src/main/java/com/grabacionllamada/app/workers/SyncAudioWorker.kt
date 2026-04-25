@@ -1,10 +1,16 @@
 package com.grabacionllamada.app.workers
 
+import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.ServiceInfo
 import android.net.Uri
+import android.os.Build
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
+import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import com.grabacionllamada.app.GrabacionApp
 import com.grabacionllamada.app.data.api.RetrofitClient
 import com.grabacionllamada.app.data.local.AppDatabase
 import com.grabacionllamada.app.utils.SessionManager
@@ -19,6 +25,21 @@ class SyncAudioWorker(
     appContext: Context,
     workerParams: WorkerParameters
 ) : CoroutineWorker(appContext, workerParams) {
+
+    override suspend fun getForegroundInfo(): ForegroundInfo {
+        val notification = NotificationCompat.Builder(applicationContext, GrabacionApp.CHANNEL_ID)
+            .setContentTitle("Subiendo grabación...")
+            .setContentText("Sincronizando audio de llamada con el servidor")
+            .setSmallIcon(android.R.drawable.ic_menu_upload)
+            .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .build()
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(3, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        } else {
+            ForegroundInfo(3, notification)
+        }
+    }
 
     override suspend fun doWork(): Result {
         val sessionManager = SessionManager(applicationContext)
@@ -49,32 +70,57 @@ class SyncAudioWorker(
             }
 
             try {
-                // Leer el URI guardado
-                val uri = Uri.parse(call.audioPath)
-                val contentResolver = applicationContext.contentResolver
-                
-                // Tratar de averiguar el MIME Type
-                val mimeTypeString = contentResolver.getType(uri) ?: "audio/mpeg"
-                
-                // Copiar a un archivo temporal para enviar con OkHttp
-                val tempFile = File(applicationContext.cacheDir, "temp_audio_${call.id}.m4a")
-                contentResolver.openInputStream(uri)?.use { input ->
+                val audioPath = call.audioPath ?: continue
+                val uri = Uri.parse(audioPath)
+
+                // Determinar extensión del archivo original
+                val originalExt = audioPath.substringAfterLast('.', "mp3").lowercase()
+                val ext = if (originalExt in setOf("mp3","wav","m4a","aac","ogg","3gp","amr","opus")) originalExt else "mp3"
+                val mimeTypeString = when (ext) {
+                    "mp3"  -> "audio/mpeg"
+                    "wav"  -> "audio/wav"
+                    "m4a"  -> "audio/m4a"
+                    "aac"  -> "audio/aac"
+                    "ogg"  -> "audio/ogg"
+                    "3gp"  -> "audio/3gpp"
+                    "amr"  -> "audio/amr"
+                    "opus" -> "audio/opus"
+                    else   -> "audio/mpeg"
+                }
+
+                // Copiar a archivo temporal — soporte para file:// y content://
+                val tempFile = File(applicationContext.cacheDir, "temp_audio_${call.id}.$ext")
+                val inputStream = when (uri.scheme) {
+                    "file"    -> java.io.FileInputStream(uri.path!!)
+                    "content" -> applicationContext.contentResolver.openInputStream(uri)
+                    else      -> java.io.FileInputStream(audioPath)
+                }
+
+                inputStream?.use { input ->
                     FileOutputStream(tempFile).use { output ->
                         input.copyTo(output)
                     }
                 }
 
-                if (!tempFile.exists()) {
-                    Log.e("SyncAudioWorker", "No se pudo crear archivo temporal para llamada ID ${call.id}")
+                if (!tempFile.exists() || tempFile.length() == 0L) {
+                    Log.e("SyncAudioWorker", "No se pudo leer el archivo de audio para llamada ID ${call.id} — path: $audioPath")
                     hasFailures = true
                     continue
                 }
 
-                Log.d("SyncAudioWorker", "Subiendo audio para llamada remota ID: $backendId...")
+                Log.i("SyncAudioWorker", "Archivo listo: ${tempFile.name} (${tempFile.length()/1024}KB)")
+
+                Log.d("SyncAudioWorker", "Subiendo audio para llamada remota ID: $backendId (${tempFile.length()/1024}KB)...")
                 
+                // Calcular MD5 real del archivo para validación del servidor
+                val md5Hash = java.security.MessageDigest.getInstance("MD5")
+                    .digest(tempFile.readBytes())
+                    .joinToString("") { "%02x".format(it) }
+                Log.d("SyncAudioWorker", "MD5: $md5Hash")
+
                 val reqFile = tempFile.asRequestBody(mimeTypeString.toMediaTypeOrNull())
                 val multipartBody = MultipartBody.Part.createFormData("audio_file", tempFile.name, reqFile)
-                val hashBody = "dummy-hash".toRequestBody("text/plain".toMediaTypeOrNull())
+                val hashBody = md5Hash.toRequestBody("text/plain".toMediaTypeOrNull())
                 val mimeBody = mimeTypeString.toRequestBody("text/plain".toMediaTypeOrNull())
                 val sourceModeBody = "manual".toRequestBody("text/plain".toMediaTypeOrNull())
 
@@ -94,7 +140,10 @@ class SyncAudioWorker(
                     val code = response.code()
                     when (code) {
                         401 -> return Result.failure()
-                        422 -> Log.e("SyncAudioWorker", "HTTP 422 Payload Invalido para audio llamada $backendId.")
+                        422 -> {
+                        val errorBody = response.errorBody()?.string() ?: "sin detalle"
+                        Log.e("SyncAudioWorker", "HTTP 422 para audio $backendId: $errorBody")
+                    }
                         else -> {
                             Log.e("SyncAudioWorker", "Error HTTP $code al subir audio llamada ID remoto $backendId.")
                             hasFailures = true

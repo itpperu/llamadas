@@ -1,8 +1,8 @@
 # Manual de Usuario — Sistema de Monitoreo de Llamadas Comerciales
 
-**Versión:** 1.0  
-**Fecha:** 2026-04-24  
-**URL del sistema:** http://llamadas.innovationtechnologyperu.com
+**Versión:** 1.1  
+**Fecha:** 2026-04-25  
+**URL del sistema:** https://llamadas.innovationtechnologyperu.com
 
 ---
 
@@ -17,7 +17,7 @@
 7. [Panel Web — Gestión de Vendedores](#7-panel-web--gestión-de-vendedores)
 8. [Panel Web — Configuración y Diagnóstico](#8-panel-web--configuración-y-diagnóstico)
 9. [Aplicación Android — Instalación](#9-aplicación-android--instalación)
-10. [Aplicación Android — Login](#10-aplicación-android--login)
+10. [Aplicación Android — Login y primera configuración](#10-aplicación-android--login)
 11. [Aplicación Android — Log de Llamadas](#11-aplicación-android--log-de-llamadas)
 12. [Aplicación Android — Configuración](#12-aplicación-android--configuración)
 13. [Aplicación Android — Asociar Audio](#13-aplicación-android--asociar-audio)
@@ -45,7 +45,7 @@ El sistema tiene cuatro tipos de usuarios:
 Abrir el navegador y dirigirse a:
 
 ```
-http://llamadas.innovationtechnologyperu.com
+https://llamadas.innovationtechnologyperu.com
 ```
 
 Aparecerá la pantalla de inicio de sesión. Ingresar:
@@ -245,16 +245,33 @@ Muestra todos los vendedores registrados con su nombre, teléfono corporativo, d
 
 ### 7.2 Crear un nuevo vendedor
 
+El proceso correcto es el siguiente porque el UUID del celular solo se conoce después de instalar la app:
+
+**Paso 1 — Crear el vendedor sin UUID**
+
 1. Hacer clic en **"+ Nuevo Vendedor"**
 2. Completar el formulario:
    - **Nombre completo** del vendedor
    - **Usuario** con el que iniciará sesión en la app Android
    - **Contraseña** inicial para la app Android
    - **Teléfono corporativo** (número del celular asignado)
-   - **UUID del dispositivo** — *opcional al crear*. Se puede dejar en blanco y asignarlo después
+   - **UUID del dispositivo** — dejar en blanco por ahora
 3. Hacer clic en **"Dar de Alta Vendedor"**
 
-> **Flujo recomendado:** Crear primero al vendedor sin UUID → instalar la app en el celular → el vendedor inicia sesión → copiar el UUID que aparece en la pestaña ⚙️ Configuración de la app → volver al panel y editarlo con el UUID real.
+**Paso 2 — Obtener el UUID del celular del vendedor**
+
+1. Instalar la app en el celular corporativo del vendedor (ver sección 9)
+2. El vendedor abre la app y toca **"Ver UUID"** en la pantalla de login
+3. El vendedor toca **"Copiar"** y envía el código al administrador
+
+**Paso 3 — Registrar el UUID en el sistema**
+
+1. En el panel web, ir a **👥 Vendedores**
+2. Buscar al vendedor recién creado y hacer clic en **"Editar"**
+3. Pegar el UUID en el campo **"UUID del Dispositivo Corporativo"**
+4. Hacer clic en **"Guardar Cambios"**
+
+A partir de este momento el vendedor puede iniciar sesión en la app normalmente.
 
 ### 7.3 Editar un vendedor
 
@@ -304,10 +321,54 @@ Hacer clic en **"Revocar"** en la fila del token. Los sistemas que lo usen perde
 ### 9.1 Requisitos del celular
 
 - Android 8.0 o superior
-- Grabación de llamadas habilitada en el equipo (función nativa del dispositivo)
 - Conexión a internet (WiFi o datos móviles)
+- Grabación nativa de llamadas activada (ver paso 9.2 — obligatorio)
 
-### 9.2 Instalar la aplicación
+---
+
+### 9.2 Activar la grabación nativa de llamadas ⚠️ OBLIGATORIO
+
+> **Este paso es el más importante.** Sin grabación activa en el dispositivo, el sistema no tendrá audio que procesar y el análisis de IA no funcionará.
+
+La app **no graba llamadas por sí sola** — utiliza la grabación nativa del dispositivo. Debe activarse una sola vez en cada celular corporativo.
+
+#### En Xiaomi / MIUI (celulares corporativos del equipo)
+
+1. Abrir la app **Teléfono** (el marcador nativo del celular)
+2. Tocar los **tres puntos ⋮** en la esquina superior derecha → **Configuración**
+3. Buscar la opción **"Grabación de llamadas"**
+4. Activar **"Grabar llamadas automáticamente"**
+5. En la opción de alcance, seleccionar **"Todas las llamadas"**
+6. Confirmar si el sistema lo solicita
+
+A partir de ese momento, cada llamada realizada o recibida quedará grabada automáticamente.
+
+#### Dónde se guardan las grabaciones en Xiaomi
+
+Las grabaciones quedan en la memoria interna del celular, en la siguiente ruta:
+
+```
+Almacenamiento interno → MIUI → sound_recorder → call_rec
+```
+
+El vendedor debe navegar a esa carpeta al momento de **Asociar Audio** para seleccionar el archivo correcto.
+
+#### En otros modelos de Android
+
+Si los celulares corporativos no son Xiaomi, el procedimiento varía:
+
+| Marca | Ruta típica |
+|---|---|
+| Samsung | Teléfono → ⋮ → Configuración → Grabación de llamadas |
+| Huawei | Teléfono → ⋮ → Configuración → Grabar llamadas |
+| Motorola | Teléfono → ⋮ → Configuración → Grabación de llamadas |
+| Nokia | Teléfono → ⋮ → Ajustes → Grabación de llamadas |
+
+> Si el dispositivo no tiene opción de grabación nativa, contactar al administrador de sistemas. Puede ser necesario habilitar una opción de desarrollador o usar un modelo diferente de celular.
+
+---
+
+### 9.3 Instalar la aplicación
 
 1. Recibir el archivo `app-debug.apk` del administrador de sistemas (por correo, WhatsApp o USB)
 2. En el celular, ir a **Ajustes → Seguridad** (o **Ajustes → Aplicaciones**)
@@ -316,7 +377,7 @@ Hacer clic en **"Revocar"** en la fila del token. Los sistemas que lo usen perde
 5. Tocar **"Instalar"** y esperar que termine
 6. Tocar **"Abrir"** para iniciar la aplicación
 
-### 9.3 Permisos requeridos
+### 9.4 Permisos requeridos
 
 Al abrir la app por primera vez, solicitará los siguientes permisos. Es obligatorio aceptarlos todos:
 
@@ -329,18 +390,47 @@ Al abrir la app por primera vez, solicitará los siguientes permisos. Es obligat
 
 ## 10. Aplicación Android — Login
 
-### 10.1 Iniciar sesión
+### 10.1 Configurar el servidor (primera vez)
 
-1. Abrir la aplicación **"Grabación Llamada"** en el celular
-2. Ingresar el **correo electrónico** o **usuario** asignado por el administrador
+Antes de iniciar sesión por primera vez, verificar que la app apunta al servidor correcto:
+
+1. En la pantalla de login, tocar **"Cambiar servidor"** (parte inferior)
+2. Escribir la URL del servidor: `https://llamadas.innovationtechnologyperu.com/api/`
+3. Tocar **"Guardar"** — la pantalla se recarga automáticamente
+4. Verificar que el texto inferior muestre la URL correcta
+
+> Solo se hace una vez. La URL queda guardada en el celular.
+
+---
+
+### 10.2 Obtener el UUID del dispositivo (antes de crear el usuario)
+
+El UUID es el identificador único del celular. El administrador lo necesita para registrar el dispositivo en el sistema **antes** de que el vendedor pueda iniciar sesión.
+
+**Pasos para obtener y compartir el UUID:**
+
+1. Abrir la app en el celular
+2. En la pantalla de login, tocar **"Ver UUID"** (parte inferior)
+3. Aparece un popup con el código único del dispositivo, por ejemplo: `c874364840e0f7d1`
+4. Tocar **"Copiar"** para copiarlo al portapapeles
+5. Enviar ese código al administrador por WhatsApp, correo o mensaje
+
+El administrador usa ese código al crear o editar el vendedor en el panel web.
+
+---
+
+### 10.3 Iniciar sesión
+
+Una vez que el administrador haya registrado el usuario con el UUID del dispositivo:
+
+1. Abrir la aplicación en el celular
+2. Ingresar el **usuario** asignado por el administrador
 3. Ingresar la **contraseña**
 4. Tocar **"Iniciar Sesión"**
 
 Una vez dentro, el sistema comienza a detectar llamadas automáticamente en segundo plano. No es necesario mantener la app abierta.
 
-### 10.2 Obtener el UUID del dispositivo
-
-El UUID es el identificador único del celular que el administrador necesita para registrar el dispositivo. Se puede ver en la pestaña **"⚙️ Configuración"** de la app, en el campo **"Dispositivo"**.
+> Si aparece el error **"Dispositivo no autorizado"**, significa que el UUID aún no fue registrado en el panel. Compartir el UUID con el administrador siguiendo los pasos de la sección 10.2.
 
 ---
 
@@ -416,13 +506,16 @@ Cuando una llamada se registra pero no tiene grabación adjunta, el estado apare
 
 ### 13.2 Adjuntar el audio manualmente
 
-1. En la pantalla principal de la app, tocar el botón **"Asociar y Subir Audio"**
-2. La app identifica la próxima llamada que necesita audio
-3. Aparece un mensaje con el número de teléfono de esa llamada
-4. Se abre el selector de archivos del celular
-5. Navegar hasta la carpeta donde el celular guarda las grabaciones
-   - En la mayoría de dispositivos: `Almacenamiento interno → Grabaciones` o `Llamadas grabadas`
-6. Seleccionar el archivo de audio correspondiente a esa llamada
+1. En la pestaña **📋 Log de Llamadas**, tocar el botón **"🎙️ Asociar Audio"**
+2. La app identifica la próxima llamada que necesita audio y muestra el número de teléfono
+3. Se abre el selector de archivos del celular
+4. Navegar hasta la carpeta donde están las grabaciones:
+   - **Xiaomi Redmi 14 Pro (HyperOS):** `Almacenamiento interno → Download → Grabaciones`
+   - **Xiaomi/MIUI clásico:** `Almacenamiento interno → MIUI → sound_recorder → call_rec`
+   - **Samsung:** `Almacenamiento interno → Grabaciones de llamadas`
+   - **Otros:** `Almacenamiento interno → Grabaciones` o `Llamadas grabadas`
+5. Seleccionar el archivo de audio que corresponde a esa llamada (verificar por hora y duración)
+6. La app sube el audio automáticamente al servidor
 7. La app sube el audio automáticamente al servidor
 
 > Si no hay internet en ese momento, la subida se reintenta automáticamente cuando haya conexión.
@@ -432,7 +525,12 @@ Cuando una llamada se registra pero no tiene grabación adjunta, el estado apare
 ## 14. Preguntas frecuentes
 
 **¿Las llamadas se graban automáticamente?**
-No. El sistema utiliza la grabación nativa del dispositivo Android. La app detecta que ocurrió una llamada y ayuda a subir la grabación al servidor. El propio dispositivo es el que graba.
+El sistema utiliza la grabación nativa del dispositivo Android — no graba por cuenta propia. Para que funcione, la grabación automática de llamadas debe estar activada en la app Teléfono del celular (ver sección 9.2). Sin eso, no habrá archivo de audio y el análisis de IA no funcionará. Es el paso más importante antes de usar el sistema.
+
+**¿Dónde se guardan las grabaciones en Xiaomi?**
+Depende del modelo:
+- **Redmi 14 Pro (HyperOS):** `Almacenamiento interno → Download → Grabaciones`
+- **MIUI clásico:** `Almacenamiento interno → MIUI → sound_recorder → call_rec`
 
 **¿Qué pasa si el celular no tiene internet durante una llamada?**
 La app guarda la información de la llamada localmente y la sincroniza automáticamente cuando recupera la conexión. No se pierde ningún registro.
@@ -448,6 +546,9 @@ Sí. En el detalle de cada llamada hay un reproductor integrado. No es necesario
 
 **¿Qué significa que el score de venta sea 0?**
 Puede significar que la llamada fue muy corta, fue una llamada perdida, o que el análisis no detectó señales de interés comercial. No indica necesariamente un problema técnico.
+
+**¿Por qué sale "Dispositivo no autorizado" al iniciar sesión?**
+El UUID del celular no está registrado en el sistema. El vendedor debe tocar **"Ver UUID"** en la pantalla de login, copiar el código y enviárselo al administrador. El administrador lo registra editando el vendedor en el panel web.
 
 **¿Cómo se crea un usuario nuevo para el panel web?**
 Solo el administrador del sistema puede crear usuarios web. Debe contactar al área de sistemas.

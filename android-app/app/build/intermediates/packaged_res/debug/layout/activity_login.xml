@@ -9,17 +9,24 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ingreso al Sistema"
-        android:textSize="24sp"
+        android:text="AI Call Sync"
+        android:textSize="26sp"
         android:textStyle="bold"
-        android:layout_marginBottom="32dp"/>
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Panel del Vendedor"
+        android:textSize="14sp"
+        android:textColor="#888888"
+        android:layout_marginBottom="40dp"/>
 
     <EditText
         android:id="@+id/etUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Usuario (Ej. vendedor01)"
-        android:text="vendedor01"
+        android:hint="Usuario"
         android:inputType="text"
         android:layout_marginBottom="16dp"/>
 
@@ -28,24 +35,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Contraseña"
-        android:text="password123"
         android:inputType="textPassword"
-        android:layout_marginBottom="16dp"/>
-
-    <EditText
-        android:id="@+id/etDeviceUuid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="ID Dispositivo"
-        android:text="android-001"
-        android:inputType="text"
         android:layout_marginBottom="24dp"/>
 
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Acceder"/>
+        android:text="Iniciar Sesión"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -53,5 +50,49 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tvServerUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textSize="11sp"
+        android:textColor="#AAAAAA"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:id="@+id/tvConfigServer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cambiar servidor"
+            android:textSize="12sp"
+            android:textColor="#6200EE"
+            android:padding="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="|"
+            android:textColor="#CCCCCC"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tvVerUuid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ver UUID"
+            android:textSize="12sp"
+            android:textColor="#6200EE"
+            android:padding="8dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

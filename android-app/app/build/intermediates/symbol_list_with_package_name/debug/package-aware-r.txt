@@ -3179,10 +3179,13 @@ id bounce
 id bounceBoth
 id bounceEnd
 id bounceStart
+id btnAsociar
+id btnAttachAudio
 id btnDeleteLog
 id btnLogin
 id btnLogout
 id btnSaveUrl
+id btnSyncNow
 id buttonPanel
 id cache_measures
 id callMeasure
@@ -3264,7 +3267,6 @@ id end
 id endToStart
 id enterAlways
 id enterAlwaysCollapsed
-id etDeviceUuid
 id etPassword
 id etServerUrl
 id etUsuario
@@ -3567,15 +3569,19 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id tvConfigServer
 id tvCurrentUrl
 id tvDate
 id tvDevice
 id tvEmptyLog
 id tvPhone
+id tvServerUrl
 id tvStatus
+id tvSyncStatus
 id tvType
 id tvTypeIcon
 id tvVendedor
+id tvVerUuid
 id tvWelcome
 id unchecked
 id uniform
@@ -5237,3 +5243,4 @@ styleable ViewPager2 android_orientation
 styleable ViewStubCompat android_id android_layout android_inflatedId
 styleable ViewTransition android_id SharedValue SharedValueId clearsTag duration ifTagNotSet ifTagSet motionInterpolator motionTarget onStateTransition pathMotionArc setsTag transitionDisable upDuration viewTransitionMode
 styleable include constraintSet
+xml file_paths

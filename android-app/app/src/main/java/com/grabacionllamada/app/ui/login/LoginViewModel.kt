@@ -13,8 +13,12 @@ class LoginViewModel(private val repository: AuthRepository) : ViewModel() {
     val loginState: LiveData<LoginState> = _loginState
 
     fun login(usuario: String, pass: String, deviceUuid: String) {
-        if (usuario.isBlank() || pass.isBlank() || deviceUuid.isBlank()) {
-            _loginState.value = LoginState.Error("Llena todos los campos")
+        if (usuario.isBlank() || pass.isBlank()) {
+            _loginState.value = LoginState.Error("Ingresa usuario y contraseña")
+            return
+        }
+        if (deviceUuid.isBlank()) {
+            _loginState.value = LoginState.Error("No se pudo leer el ID del dispositivo")
             return
         }
         

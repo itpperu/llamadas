@@ -15,8 +15,10 @@ import androidx.work.WorkManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.grabacionllamada.app.data.local.AppDatabase
 import com.grabacionllamada.app.databinding.ActivityMainBinding
+import com.grabacionllamada.app.services.CallMonitorService
 import com.grabacionllamada.app.ui.login.LoginActivity
 import com.grabacionllamada.app.utils.SessionManager
+import com.grabacionllamada.app.utils.WorkerUtils
 import com.grabacionllamada.app.workers.SyncAudioWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,23 +43,40 @@ class MainActivity : AppCompatActivity() {
     private val selectAudioLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             val callId = pendingCallIdForAudio ?: return@let
-            try {
-                contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            } catch (_: SecurityException) {}
 
             CoroutineScope(Dispatchers.IO).launch {
-                val dao = AppDatabase.getDatabase(this@MainActivity).callDao()
-                val call = dao.getNextCallNeedingAudio()
-                if (call != null && call.id == callId) {
-                    dao.updateCall(call.copy(audioPath = it.toString()))
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@MainActivity, "Audio asociado. Subiendo...", Toast.LENGTH_SHORT).show()
+                try {
+                    // Copiar al cache de la app AHORA — los permisos SAF no llegan al WorkManager
+                    val ext = contentResolver.getType(it)?.substringAfterLast('/') ?: "mp3"
+                    val cacheFile = java.io.File(cacheDir, "manual_audio_${callId}.$ext")
+
+                    contentResolver.openInputStream(it)?.use { input ->
+                        java.io.FileOutputStream(cacheFile).use { output ->
+                            input.copyTo(output)
+                        }
                     }
-                    WorkManager.getInstance(this@MainActivity).enqueue(
-                        OneTimeWorkRequestBuilder<SyncAudioWorker>()
-                            .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
-                            .build()
-                    )
+
+                    if (!cacheFile.exists() || cacheFile.length() == 0L) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(this@MainActivity, "No se pudo leer el archivo seleccionado", Toast.LENGTH_LONG).show()
+                        }
+                        return@launch
+                    }
+
+                    // Guardar la ruta del cache (no el URI SAF)
+                    val dao  = AppDatabase.getDatabase(this@MainActivity).callDao()
+                    val call = dao.getCallById(callId)
+                    if (call != null) {
+                        dao.updateCall(call.copy(audioPath = "file://${cacheFile.absolutePath}"))
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(this@MainActivity, "Audio asociado. Subiendo...", Toast.LENGTH_SHORT).show()
+                        }
+                        WorkerUtils.enqueueSyncAudio(this@MainActivity)
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         } ?: Toast.makeText(this, "Selección cancelada", Toast.LENGTH_SHORT).show()
@@ -70,6 +89,9 @@ class MainActivity : AppCompatActivity() {
 
         sessionManager = SessionManager(this)
         binding.tvWelcome.text = "Vendedor: ${sessionManager.getVendedorId()}"
+
+        // Iniciar servicio de monitoreo en primer plano
+        CallMonitorService.start(this)
 
         // ViewPager2 + Tabs
         val adapter = MainPagerAdapter(this)
@@ -97,8 +119,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAndRequestPermissions() {
-        val needed = listOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG)
-            .filter { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }
+        val permissions = mutableListOf(
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_CALL_LOG
+        )
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            permissions.add(Manifest.permission.READ_MEDIA_AUDIO)
+            permissions.add(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        val needed = permissions.filter {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
         if (needed.isNotEmpty()) requestPermissionsLauncher.launch(needed.toTypedArray())
     }
 }

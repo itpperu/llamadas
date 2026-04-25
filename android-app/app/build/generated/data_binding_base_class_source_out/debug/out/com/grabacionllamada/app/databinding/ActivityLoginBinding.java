@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
@@ -25,9 +26,6 @@ public final class ActivityLoginBinding implements ViewBinding {
   public final Button btnLogin;
 
   @NonNull
-  public final EditText etDeviceUuid;
-
-  @NonNull
   public final EditText etPassword;
 
   @NonNull
@@ -36,15 +34,27 @@ public final class ActivityLoginBinding implements ViewBinding {
   @NonNull
   public final ProgressBar progressBar;
 
+  @NonNull
+  public final TextView tvConfigServer;
+
+  @NonNull
+  public final TextView tvServerUrl;
+
+  @NonNull
+  public final TextView tvVerUuid;
+
   private ActivityLoginBinding(@NonNull LinearLayout rootView, @NonNull Button btnLogin,
-      @NonNull EditText etDeviceUuid, @NonNull EditText etPassword, @NonNull EditText etUsuario,
-      @NonNull ProgressBar progressBar) {
+      @NonNull EditText etPassword, @NonNull EditText etUsuario, @NonNull ProgressBar progressBar,
+      @NonNull TextView tvConfigServer, @NonNull TextView tvServerUrl,
+      @NonNull TextView tvVerUuid) {
     this.rootView = rootView;
     this.btnLogin = btnLogin;
-    this.etDeviceUuid = etDeviceUuid;
     this.etPassword = etPassword;
     this.etUsuario = etUsuario;
     this.progressBar = progressBar;
+    this.tvConfigServer = tvConfigServer;
+    this.tvServerUrl = tvServerUrl;
+    this.tvVerUuid = tvVerUuid;
   }
 
   @Override
@@ -80,12 +90,6 @@ public final class ActivityLoginBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.etDeviceUuid;
-      EditText etDeviceUuid = ViewBindings.findChildViewById(rootView, id);
-      if (etDeviceUuid == null) {
-        break missingId;
-      }
-
       id = R.id.etPassword;
       EditText etPassword = ViewBindings.findChildViewById(rootView, id);
       if (etPassword == null) {
@@ -104,8 +108,26 @@ public final class ActivityLoginBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityLoginBinding((LinearLayout) rootView, btnLogin, etDeviceUuid, etPassword,
-          etUsuario, progressBar);
+      id = R.id.tvConfigServer;
+      TextView tvConfigServer = ViewBindings.findChildViewById(rootView, id);
+      if (tvConfigServer == null) {
+        break missingId;
+      }
+
+      id = R.id.tvServerUrl;
+      TextView tvServerUrl = ViewBindings.findChildViewById(rootView, id);
+      if (tvServerUrl == null) {
+        break missingId;
+      }
+
+      id = R.id.tvVerUuid;
+      TextView tvVerUuid = ViewBindings.findChildViewById(rootView, id);
+      if (tvVerUuid == null) {
+        break missingId;
+      }
+
+      return new ActivityLoginBinding((LinearLayout) rootView, btnLogin, etPassword, etUsuario,
+          progressBar, tvConfigServer, tvServerUrl, tvVerUuid);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

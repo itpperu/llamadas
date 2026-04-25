@@ -63,17 +63,42 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Estado de sincronización -->
-    <TextView
-        android:id="@+id/tvStatus"
+    <!-- Estado + botón Asociar -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:background="@drawable/ic_status_bg"/>
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingStart="8dp">
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="@drawable/ic_status_bg"/>
+
+        <Button
+            android:id="@+id/btnAsociar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Asociar"
+            android:textSize="10sp"
+            android:backgroundTint="#00897B"
+            android:textColor="#FFFFFF"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:minHeight="0dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,13 +1,18 @@
 package com.grabacionllamada.app.utils
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.provider.CallLog
 import android.util.Log
+import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 object CallLogReader {
+
+    private const val TAG = "CallLogReader"
 
     data class CallMetadata(
         val number: String,
@@ -18,56 +23,67 @@ object CallLogReader {
     )
 
     fun getLastCall(context: Context): CallMetadata? {
-        try {
+
+        // Verificar permiso antes de consultar
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG)
+            != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "Permiso READ_CALL_LOG no otorgado")
+            return null
+        }
+
+        return try {
             val projection = arrayOf(
                 CallLog.Calls.NUMBER,
                 CallLog.Calls.TYPE,
                 CallLog.Calls.DATE,
                 CallLog.Calls.DURATION
             )
-            val cursor = context.contentResolver.query(
+
+            context.contentResolver.query(
                 CallLog.Calls.CONTENT_URI,
                 projection,
                 null,
                 null,
-                CallLog.Calls.DATE + " DESC LIMIT 1"
-            )
-
-            cursor?.use {
-                if (it.moveToFirst()) {
-                    val numIndex = it.getColumnIndex(CallLog.Calls.NUMBER)
-                    val typeIndex = it.getColumnIndex(CallLog.Calls.TYPE)
-                    val dateIndex = it.getColumnIndex(CallLog.Calls.DATE)
-                    val durIndex = it.getColumnIndex(CallLog.Calls.DURATION)
-
-                    val number = it.getString(numIndex)
-                    val typeCode = it.getInt(typeIndex)
-                    val dateMillis = it.getLong(dateIndex)
-                    val duration = it.getInt(durIndex)
-
-                    val typeStr = when (typeCode) {
-                        CallLog.Calls.INCOMING_TYPE -> "entrante"
-                        CallLog.Calls.OUTGOING_TYPE -> "saliente"
-                        CallLog.Calls.MISSED_TYPE -> "perdida"
-                        CallLog.Calls.REJECTED_TYPE -> "perdida"
-                        else -> "entrante"
-                    }
-
-                    val startDate = Date(dateMillis)
-                    val endDate = Date(dateMillis + (duration * 1000L))
-                    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                    val dateStartIso = sdf.format(startDate)
-                    val dateEndIso = sdf.format(endDate)
-
-                    Log.d("CallLogReader", "Llamada Reciente: $number / $typeStr / $duration seg")
-                    return CallMetadata(number, typeStr, dateStartIso, dateEndIso, duration)
+                "${CallLog.Calls.DATE} DESC"   // Sin LIMIT — moveToFirst() toma el primero
+            )?.use { cursor ->
+                if (!cursor.moveToFirst()) {
+                    Log.w(TAG, "CallLog vacío")
+                    return null
                 }
+
+                val number   = cursor.getString(cursor.getColumnIndexOrThrow(CallLog.Calls.NUMBER)) ?: ""
+                val typeCode = cursor.getInt(cursor.getColumnIndexOrThrow(CallLog.Calls.TYPE))
+                val dateMs   = cursor.getLong(cursor.getColumnIndexOrThrow(CallLog.Calls.DATE))
+                val duration = cursor.getInt(cursor.getColumnIndexOrThrow(CallLog.Calls.DURATION))
+
+                val typeStr = when (typeCode) {
+                    CallLog.Calls.INCOMING_TYPE  -> "entrante"
+                    CallLog.Calls.OUTGOING_TYPE  -> "saliente"
+                    CallLog.Calls.MISSED_TYPE    -> "perdida"
+                    CallLog.Calls.REJECTED_TYPE  -> "perdida"
+                    else                         -> "entrante"
+                }
+
+                val sdf        = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                val startDate  = Date(dateMs)
+                val endDate    = Date(dateMs + duration * 1000L)
+
+                Log.i(TAG, "Última llamada: $number / $typeStr / ${duration}s")
+
+                CallMetadata(
+                    number          = number,
+                    type            = typeStr,
+                    dateStartIso    = sdf.format(startDate),
+                    dateEndIso      = sdf.format(endDate),
+                    durationSeconds = duration
+                )
             }
         } catch (e: SecurityException) {
-            Log.e("CallLogReader", "Permiso CallLog denegado: ${e.message}")
+            Log.e(TAG, "Permiso denegado: ${e.message}")
+            null
         } catch (e: Exception) {
-            Log.e("CallLogReader", "Error leyendo CallLog: ${e.message}")
+            Log.e(TAG, "Error leyendo CallLog: ${e.message}")
+            null
         }
-        return null
     }
 }
