@@ -44,6 +44,21 @@
                 <label class="text-muted">🔒 Nueva Contraseña (Opcional)</label><br>
                 <input type="password" name="password" placeholder="Dejar en blanco para no cambiar" style="width:100%; height:40px; border-radius:8px; border:1px solid #ddd; padding: 0.5rem; margin-top: 0.5rem;">
             </div>
+            <div style="grid-column: span 2;">
+                <label class="text-muted">📱 UUID del Dispositivo Corporativo (Android ID)</label><br>
+                <input type="text" name="device_uuid"
+                    value="{{ old('device_uuid', $vendedor->dispositivos->first()?->device_uuid) }}"
+                    placeholder="Ej: 8e8f8f8f8f8f8f8f"
+                    style="width:100%; height:40px; border-radius:8px; border:1px solid #ddd; padding: 0.5rem; margin-top: 0.5rem;">
+                <small class="text-muted">
+                    @if($vendedor->dispositivos->isEmpty())
+                        ⚠️ Este vendedor aún no tiene dispositivo asignado. Ingresa el UUID para habilitarlo.
+                    @else
+                        UUID actual del dispositivo registrado. Modifícalo solo si cambió el celular.
+                    @endif
+                    El UUID se obtiene en la app Android: pestaña <strong>⚙️ Configuración → Dispositivo</strong>.
+                </small>
+            </div>
         </div>
 
         <div style="margin-top: 2rem; border-top: 1px solid #f1f5f9; padding-top: 1.5rem; display: flex; justify-content: flex-end;">

@@ -21,4 +21,10 @@ interface CallDao {
 
     @Query("SELECT * FROM calls WHERE isMetadataSynced = 1 AND isAudioSynced = 0 AND audioPath IS NULL LIMIT 1")
     suspend fun getNextCallNeedingAudio(): CallEntity?
+
+    @Query("SELECT * FROM calls ORDER BY id DESC")
+    suspend fun getAllCalls(): List<CallEntity>
+
+    @Query("DELETE FROM calls")
+    suspend fun deleteAll()
 }

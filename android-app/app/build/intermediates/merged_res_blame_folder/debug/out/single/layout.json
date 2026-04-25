@@ -1,14 +1,30 @@
 [
     {
-        "merged": "com.grabacionllamada.app-mergeDebugResources-40:/layout/activity_main.xml",
-        "source": "com.grabacionllamada.app-main-43:/layout/activity_main.xml"
+        "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-mergeDebugResources-41:\\layout\\fragment_config.xml",
+        "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-44:\\layout\\fragment_config.xml"
     },
     {
-        "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-mergeDebugResources-40:\\layout\\activity_login.xml",
-        "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-43:\\layout\\activity_login.xml"
+        "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-mergeDebugResources-41:\\layout\\activity_login.xml",
+        "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-44:\\layout\\activity_login.xml"
     },
     {
-        "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-mergeDebugResources-40:\\layout\\activity_main.xml",
-        "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-43:\\layout\\activity_main.xml"
+        "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-mergeDebugResources-41:\\layout\\fragment_log.xml",
+        "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-44:\\layout\\fragment_log.xml"
+    },
+    {
+        "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-mergeDebugResources-41:\\layout\\item_call_log.xml",
+        "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-44:\\layout\\item_call_log.xml"
+    },
+    {
+        "merged": "com.grabacionllamada.app-mergeDebugResources-41:/layout/fragment_config.xml",
+        "source": "com.grabacionllamada.app-main-44:/layout/fragment_config.xml"
+    },
+    {
+        "merged": "com.grabacionllamada.app-mergeDebugResources-41:/layout/activity_main.xml",
+        "source": "com.grabacionllamada.app-main-44:/layout/activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-mergeDebugResources-41:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\LAP-M\\.gradle\\daemon\\8.5\\com.grabacionllamada.app-main-44:\\layout\\activity_main.xml"
     }
 ]

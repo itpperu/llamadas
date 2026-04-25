@@ -22,7 +22,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            buildConfigField("String", "BASE_URL", "\"https://tu-servidor.com/api/\"")
+            buildConfigField("String", "BASE_URL", "\"http://llamadas.innovationtechnologyperu.com/api/\"")
         }
         debug {
             // Emulador Android apuntando al host localhost de la PC (Docker Laravel)
@@ -67,6 +67,9 @@ dependencies {
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

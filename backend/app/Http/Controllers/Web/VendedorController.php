@@ -25,35 +25,41 @@ class VendedorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required',
-            'usuario' => 'required|unique:vendedores,usuario',
-            'password' => 'required|min:4',
-            'telefono_corporativo' => 'nullable',
-            'device_uuid' => 'required|unique:dispositivos,device_uuid',
+            'nombre'              => 'required',
+            'usuario'             => 'required|unique:vendedores,usuario',
+            'password'            => 'required|min:4',
+            'telefono_corporativo'=> 'nullable',
+            'device_uuid'         => 'nullable|unique:dispositivos,device_uuid',
         ]);
 
         try {
             DB::beginTransaction();
 
             $vendedor = Vendedor::create([
-                'nombre' => $request->nombre,
-                'usuario' => $request->usuario,
-                'password_hash' => Hash::make($request->password),
-                'telefono_corporativo' => $request->telefono_corporativo,
-                'estado' => 'activo'
+                'nombre'              => $request->nombre,
+                'usuario'             => $request->usuario,
+                'password_hash'       => Hash::make($request->password),
+                'telefono_corporativo'=> $request->telefono_corporativo,
+                'estado'              => 'activo',
             ]);
 
-            Dispositivo::create([
-                'vendedor_id' => $vendedor->id,
-                'device_uuid' => $request->device_uuid,
-                'marca' => 'Asignado web',
-                'modelo' => 'Manual',
-                'activo' => true
-            ]);
+            if ($request->filled('device_uuid')) {
+                Dispositivo::create([
+                    'vendedor_id' => $vendedor->id,
+                    'device_uuid' => $request->device_uuid,
+                    'marca'       => 'Asignado web',
+                    'modelo'      => 'Manual',
+                    'activo'      => true,
+                ]);
+            }
 
             DB::commit();
 
-            return redirect()->route('vendedores.index')->with('success', 'Vendedor y dispositivo registrados correctamente.');
+            $msg = $request->filled('device_uuid')
+                ? 'Vendedor y dispositivo registrados correctamente.'
+                : 'Vendedor registrado. Recuerda asignar el UUID del dispositivo cuando tengas el celular.';
+
+            return redirect()->route('vendedores.index')->with('success', $msg);
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -68,16 +74,23 @@ class VendedorController extends Controller
 
     public function update(Request $request, Vendedor $vendedor)
     {
+        $dispositivo = $vendedor->dispositivos->first();
+
         $request->validate([
-            'nombre' => 'required',
+            'nombre'               => 'required',
             'telefono_corporativo' => 'nullable',
-            'estado' => 'required|in:activo,inactivo',
+            'estado'               => 'required|in:activo,inactivo',
+            'device_uuid'          => [
+                'nullable',
+                \Illuminate\Validation\Rule::unique('dispositivos', 'device_uuid')
+                    ->ignore($dispositivo?->id),
+            ],
         ]);
 
         $data = [
-            'nombre' => $request->nombre,
+            'nombre'               => $request->nombre,
             'telefono_corporativo' => $request->telefono_corporativo,
-            'estado' => $request->estado,
+            'estado'               => $request->estado,
         ];
 
         if ($request->filled('password')) {
@@ -85,6 +98,21 @@ class VendedorController extends Controller
         }
 
         $vendedor->update($data);
+
+        // Gestión del UUID del dispositivo
+        if ($request->filled('device_uuid')) {
+            if ($dispositivo) {
+                $dispositivo->update(['device_uuid' => $request->device_uuid]);
+            } else {
+                Dispositivo::create([
+                    'vendedor_id' => $vendedor->id,
+                    'device_uuid' => $request->device_uuid,
+                    'marca'       => 'Asignado web',
+                    'modelo'      => 'Manual',
+                    'activo'      => true,
+                ]);
+            }
+        }
 
         return redirect()->route('vendedores.index')->with('success', 'Vendedor actualizado correctamente.');
     }

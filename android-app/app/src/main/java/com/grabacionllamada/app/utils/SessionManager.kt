@@ -2,6 +2,7 @@ package com.grabacionllamada.app.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.grabacionllamada.app.BuildConfig
 
 class SessionManager(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("GrabacionAppPrefs", Context.MODE_PRIVATE)
@@ -31,7 +32,20 @@ class SessionManager(context: Context) {
         return getAuthToken() != null
     }
 
+    fun saveServerUrl(url: String) {
+        prefs.edit().putString("SERVER_URL", url.trimEnd('/') + "/").apply()
+    }
+
+    fun getServerUrl(): String {
+        return prefs.getString("SERVER_URL", null) ?: BuildConfig.BASE_URL
+    }
+
     fun clearSession() {
-        prefs.edit().clear().apply()
+        prefs.edit()
+            .remove("AUTH_TOKEN")
+            .remove("VENDEDOR_ID")
+            .remove("VENDEDOR_NOMBRE")
+            .remove("DEVICE_UUID")
+            .apply()
     }
 }

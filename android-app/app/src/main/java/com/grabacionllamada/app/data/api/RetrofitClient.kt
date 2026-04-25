@@ -33,7 +33,7 @@ object RetrofitClient {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
+            .baseUrl(sessionManager.getServerUrl())
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

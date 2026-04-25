@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
+import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.tabs.TabLayout;
 import com.grabacionllamada.app.R;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -21,20 +23,24 @@ public final class ActivityMainBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final Button btnAttachAudio;
+  public final Button btnLogout;
 
   @NonNull
-  public final Button btnLogout;
+  public final TabLayout tabLayout;
 
   @NonNull
   public final TextView tvWelcome;
 
-  private ActivityMainBinding(@NonNull LinearLayout rootView, @NonNull Button btnAttachAudio,
-      @NonNull Button btnLogout, @NonNull TextView tvWelcome) {
+  @NonNull
+  public final ViewPager2 viewPager;
+
+  private ActivityMainBinding(@NonNull LinearLayout rootView, @NonNull Button btnLogout,
+      @NonNull TabLayout tabLayout, @NonNull TextView tvWelcome, @NonNull ViewPager2 viewPager) {
     this.rootView = rootView;
-    this.btnAttachAudio = btnAttachAudio;
     this.btnLogout = btnLogout;
+    this.tabLayout = tabLayout;
     this.tvWelcome = tvWelcome;
+    this.viewPager = viewPager;
   }
 
   @Override
@@ -64,15 +70,15 @@ public final class ActivityMainBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.btnAttachAudio;
-      Button btnAttachAudio = ViewBindings.findChildViewById(rootView, id);
-      if (btnAttachAudio == null) {
-        break missingId;
-      }
-
       id = R.id.btnLogout;
       Button btnLogout = ViewBindings.findChildViewById(rootView, id);
       if (btnLogout == null) {
+        break missingId;
+      }
+
+      id = R.id.tabLayout;
+      TabLayout tabLayout = ViewBindings.findChildViewById(rootView, id);
+      if (tabLayout == null) {
         break missingId;
       }
 
@@ -82,7 +88,14 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityMainBinding((LinearLayout) rootView, btnAttachAudio, btnLogout, tvWelcome);
+      id = R.id.viewPager;
+      ViewPager2 viewPager = ViewBindings.findChildViewById(rootView, id);
+      if (viewPager == null) {
+        break missingId;
+      }
+
+      return new ActivityMainBinding((LinearLayout) rootView, btnLogout, tabLayout, tvWelcome,
+          viewPager);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

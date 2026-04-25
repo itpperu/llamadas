@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.grabacionllamada.app-mergeDebugResources-39:/values-it/values-it.xml",
+            "outputFile": "com.grabacionllamada.app-mergeDebugResources-40:/values-it/values-it.xml",
             "map": [
                 {
                     "source": "C:\\Users\\LAP-M\\.gradle\\caches\\transforms-3\\9756fab58daf3b55028a539310104216\\transformed\\appcompat-1.6.1\\res\\values-it\\values-it.xml",

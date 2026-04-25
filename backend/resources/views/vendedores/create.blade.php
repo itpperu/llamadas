@@ -37,9 +37,12 @@
                 <input type="text" name="telefono_corporativo" value="{{ old('telefono_corporativo') }}" placeholder="Ej: +51999888777" style="width:100%; height:40px; border-radius:8px; border:1px solid #ddd; padding: 0.5rem; margin-top: 0.5rem;">
             </div>
             <div style="grid-column: span 2;">
-                <label class="text-muted">📱 UUID del Dispositivo Corporativo (Android ID)</label><br>
-                <input type="text" name="device_uuid" value="{{ old('device_uuid') }}" placeholder="Ej: 8e8f8f8f8f8f8f8f" style="width:100%; height:40px; border-radius:8px; border:1px solid #ddd; padding: 0.5rem; margin-top: 0.5rem;" required>
-                <small class="text-muted">Este ID es necesario para autorizar el login desde el celular específico del vendedor.</small>
+                <label class="text-muted">📱 UUID del Dispositivo Corporativo (Android ID) <span style="color:#94a3b8; font-weight:400;">— Opcional</span></label><br>
+                <input type="text" name="device_uuid" value="{{ old('device_uuid') }}" placeholder="Ej: 8e8f8f8f8f8f8f8f" style="width:100%; height:40px; border-radius:8px; border:1px solid #ddd; padding: 0.5rem; margin-top: 0.5rem;">
+                <small class="text-muted">
+                    Puedes dejarlo en blanco ahora y asignarlo después desde <strong>Editar vendedor</strong> una vez que tengas el celular en mano.<br>
+                    El UUID se obtiene en la app Android: pestaña <strong>⚙️ Configuración → Dispositivo</strong>.
+                </small>
             </div>
         </div>
 

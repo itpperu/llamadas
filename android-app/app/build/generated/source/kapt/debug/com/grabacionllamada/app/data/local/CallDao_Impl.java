@@ -9,6 +9,7 @@ import androidx.room.EntityDeletionOrUpdateAdapter;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
 import androidx.room.RoomSQLiteQuery;
+import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
@@ -36,6 +37,8 @@ public final class CallDao_Impl implements CallDao {
   private final EntityInsertionAdapter<CallEntity> __insertionAdapterOfCallEntity;
 
   private final EntityDeletionOrUpdateAdapter<CallEntity> __updateAdapterOfCallEntity;
+
+  private final SharedSQLiteStatement __preparedStmtOfDeleteAll;
 
   public CallDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
@@ -136,6 +139,14 @@ public final class CallDao_Impl implements CallDao {
         statement.bindLong(11, entity.getId());
       }
     };
+    this.__preparedStmtOfDeleteAll = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "DELETE FROM calls";
+        return _query;
+      }
+    };
   }
 
   @Override
@@ -169,6 +180,29 @@ public final class CallDao_Impl implements CallDao {
           return Unit.INSTANCE;
         } finally {
           __db.endTransaction();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object deleteAll(final Continuation<? super Unit> $completion) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+      @Override
+      @NonNull
+      public Unit call() throws Exception {
+        final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteAll.acquire();
+        try {
+          __db.beginTransaction();
+          try {
+            _stmt.executeUpdateDelete();
+            __db.setTransactionSuccessful();
+            return Unit.INSTANCE;
+          } finally {
+            __db.endTransaction();
+          }
+        } finally {
+          __preparedStmtOfDeleteAll.release(_stmt);
         }
       }
     }, $completion);
@@ -416,6 +450,90 @@ public final class CallDao_Impl implements CallDao {
             _result = new CallEntity(_tmpId,_tmpTelefonoCliente,_tmpTipo,_tmpFechaInicio,_tmpFechaFin,_tmpDuracionSegundos,_tmpIsMetadataSynced,_tmpIsAudioSynced,_tmpAudioPath,_tmpBackendCallId);
           } else {
             _result = null;
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object getAllCalls(final Continuation<? super List<CallEntity>> $completion) {
+    final String _sql = "SELECT * FROM calls ORDER BY id DESC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<List<CallEntity>>() {
+      @Override
+      @NonNull
+      public List<CallEntity> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfTelefonoCliente = CursorUtil.getColumnIndexOrThrow(_cursor, "telefonoCliente");
+          final int _cursorIndexOfTipo = CursorUtil.getColumnIndexOrThrow(_cursor, "tipo");
+          final int _cursorIndexOfFechaInicio = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaInicio");
+          final int _cursorIndexOfFechaFin = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaFin");
+          final int _cursorIndexOfDuracionSegundos = CursorUtil.getColumnIndexOrThrow(_cursor, "duracionSegundos");
+          final int _cursorIndexOfIsMetadataSynced = CursorUtil.getColumnIndexOrThrow(_cursor, "isMetadataSynced");
+          final int _cursorIndexOfIsAudioSynced = CursorUtil.getColumnIndexOrThrow(_cursor, "isAudioSynced");
+          final int _cursorIndexOfAudioPath = CursorUtil.getColumnIndexOrThrow(_cursor, "audioPath");
+          final int _cursorIndexOfBackendCallId = CursorUtil.getColumnIndexOrThrow(_cursor, "backendCallId");
+          final List<CallEntity> _result = new ArrayList<CallEntity>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final CallEntity _item;
+            final int _tmpId;
+            _tmpId = _cursor.getInt(_cursorIndexOfId);
+            final String _tmpTelefonoCliente;
+            if (_cursor.isNull(_cursorIndexOfTelefonoCliente)) {
+              _tmpTelefonoCliente = null;
+            } else {
+              _tmpTelefonoCliente = _cursor.getString(_cursorIndexOfTelefonoCliente);
+            }
+            final String _tmpTipo;
+            if (_cursor.isNull(_cursorIndexOfTipo)) {
+              _tmpTipo = null;
+            } else {
+              _tmpTipo = _cursor.getString(_cursorIndexOfTipo);
+            }
+            final String _tmpFechaInicio;
+            if (_cursor.isNull(_cursorIndexOfFechaInicio)) {
+              _tmpFechaInicio = null;
+            } else {
+              _tmpFechaInicio = _cursor.getString(_cursorIndexOfFechaInicio);
+            }
+            final String _tmpFechaFin;
+            if (_cursor.isNull(_cursorIndexOfFechaFin)) {
+              _tmpFechaFin = null;
+            } else {
+              _tmpFechaFin = _cursor.getString(_cursorIndexOfFechaFin);
+            }
+            final int _tmpDuracionSegundos;
+            _tmpDuracionSegundos = _cursor.getInt(_cursorIndexOfDuracionSegundos);
+            final boolean _tmpIsMetadataSynced;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfIsMetadataSynced);
+            _tmpIsMetadataSynced = _tmp != 0;
+            final boolean _tmpIsAudioSynced;
+            final int _tmp_1;
+            _tmp_1 = _cursor.getInt(_cursorIndexOfIsAudioSynced);
+            _tmpIsAudioSynced = _tmp_1 != 0;
+            final String _tmpAudioPath;
+            if (_cursor.isNull(_cursorIndexOfAudioPath)) {
+              _tmpAudioPath = null;
+            } else {
+              _tmpAudioPath = _cursor.getString(_cursorIndexOfAudioPath);
+            }
+            final Integer _tmpBackendCallId;
+            if (_cursor.isNull(_cursorIndexOfBackendCallId)) {
+              _tmpBackendCallId = null;
+            } else {
+              _tmpBackendCallId = _cursor.getInt(_cursorIndexOfBackendCallId);
+            }
+            _item = new CallEntity(_tmpId,_tmpTelefonoCliente,_tmpTipo,_tmpFechaInicio,_tmpFechaFin,_tmpDuracionSegundos,_tmpIsMetadataSynced,_tmpIsAudioSynced,_tmpAudioPath,_tmpBackendCallId);
+            _result.add(_item);
           }
           return _result;
         } finally {
