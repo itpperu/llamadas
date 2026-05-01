@@ -326,7 +326,28 @@ Hacer clic en **"Revocar"** en la fila del token. Los sistemas que lo usen perde
 
 ---
 
-### 9.2 Activar la grabación nativa de llamadas ⚠️ OBLIGATORIO
+### 9.2 Instalar la app de grabación de llamadas — Call Up ⚠️ OBLIGATORIO
+
+El sistema requiere una aplicación de grabación de llamadas activa en el celular. La app recomendada y probada es **Call Up**.
+
+#### Instalación de Call Up
+
+1. Abrir la **Play Store** en el celular
+2. Buscar **"Call Up — Call Recorder"**
+3. Instalar y abrir la app
+4. Aceptar todos los permisos que solicite (micrófono, teléfono, almacenamiento)
+5. En la configuración de Call Up, verificar:
+   - **Grabación automática:** activada para todas las llamadas
+   - **Formato de audio:** MP3 (recomendado)
+   - **Carpeta de guardado:** la app guarda en `Almacenamiento interno → Music → CallAppRecording`
+
+> **Límite de almacenamiento de Call Up:** la app puede almacenar hasta 200MB de grabaciones localmente. Este límite no es un problema en la práctica porque el sistema elimina automáticamente el archivo de grabación del celular una vez que es subido exitosamente al servidor.
+
+> **Call Up funciona en segundo plano.** No es necesario tenerla abierta durante las llamadas — graba automáticamente.
+
+---
+
+### 9.3 Activar la grabación nativa de llamadas ⚠️ OBLIGATORIO
 
 > **Este paso es el más importante.** Sin grabación activa en el dispositivo, el sistema no tendrá audio que procesar y el análisis de IA no funcionará.
 
@@ -368,7 +389,7 @@ Si los celulares corporativos no son Xiaomi, el procedimiento varía:
 
 ---
 
-### 9.3 Instalar la aplicación
+### 9.4 Instalar la aplicación de monitoreo
 
 1. Recibir el archivo `app-debug.apk` del administrador de sistemas (por correo, WhatsApp o USB)
 2. En el celular, ir a **Ajustes → Seguridad** (o **Ajustes → Aplicaciones**)
@@ -377,7 +398,7 @@ Si los celulares corporativos no son Xiaomi, el procedimiento varía:
 5. Tocar **"Instalar"** y esperar que termine
 6. Tocar **"Abrir"** para iniciar la aplicación
 
-### 9.4 Permisos requeridos
+### 9.5 Permisos requeridos
 
 Al abrir la app por primera vez, solicitará los siguientes permisos. Es obligatorio aceptarlos todos:
 

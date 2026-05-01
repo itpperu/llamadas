@@ -16,6 +16,7 @@ import java.lang.Override;
 import java.lang.String;
 import java.lang.SuppressWarnings;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,12 +32,13 @@ public final class AppDatabase_Impl extends AppDatabase {
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(2) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(3) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `calls` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `telefonoCliente` TEXT NOT NULL, `tipo` TEXT NOT NULL, `fechaInicio` TEXT NOT NULL, `fechaFin` TEXT NOT NULL, `duracionSegundos` INTEGER NOT NULL, `isMetadataSynced` INTEGER NOT NULL, `isAudioSynced` INTEGER NOT NULL, `audioPath` TEXT, `backendCallId` INTEGER)");
+        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_calls_telefonoCliente_fechaInicio` ON `calls` (`telefonoCliente`, `fechaInicio`)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f71e735753fdf113f347d8a34da57c6f')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '89cab4d33162ae71a4c67563bb14ae56')");
       }
 
       @Override
@@ -97,7 +99,8 @@ public final class AppDatabase_Impl extends AppDatabase {
         _columnsCalls.put("audioPath", new TableInfo.Column("audioPath", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsCalls.put("backendCallId", new TableInfo.Column("backendCallId", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysCalls = new HashSet<TableInfo.ForeignKey>(0);
-        final HashSet<TableInfo.Index> _indicesCalls = new HashSet<TableInfo.Index>(0);
+        final HashSet<TableInfo.Index> _indicesCalls = new HashSet<TableInfo.Index>(1);
+        _indicesCalls.add(new TableInfo.Index("index_calls_telefonoCliente_fechaInicio", true, Arrays.asList("telefonoCliente", "fechaInicio"), Arrays.asList("ASC", "ASC")));
         final TableInfo _infoCalls = new TableInfo("calls", _columnsCalls, _foreignKeysCalls, _indicesCalls);
         final TableInfo _existingCalls = TableInfo.read(db, "calls");
         if (!_infoCalls.equals(_existingCalls)) {
@@ -107,7 +110,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "f71e735753fdf113f347d8a34da57c6f", "169f95d3aa2e149d84127a4946f874e8");
+    }, "89cab4d33162ae71a4c67563bb14ae56", "8ccf2121dd2c9ad60ad21ee7d4c77471");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;

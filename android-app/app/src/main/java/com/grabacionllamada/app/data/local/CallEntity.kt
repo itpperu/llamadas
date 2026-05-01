@@ -3,7 +3,10 @@ package com.grabacionllamada.app.data.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "calls")
+@Entity(
+    tableName = "calls",
+    indices = [androidx.room.Index(value = ["telefonoCliente", "fechaInicio"], unique = true)]
+)
 data class CallEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val telefonoCliente: String,

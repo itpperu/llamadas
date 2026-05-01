@@ -7,7 +7,7 @@ import androidx.room.Update
 
 @Dao
 interface CallDao {
-    @Insert
+    @Insert(onConflict = androidx.room.OnConflictStrategy.IGNORE)
     suspend fun insertCall(call: CallEntity): Long
 
     @Update

@@ -4,7 +4,7 @@ package com.grabacionllamada.app.data.local;
 @androidx.room.Dao()
 public abstract interface CallDao {
     
-    @androidx.room.Insert()
+    @androidx.room.Insert(onConflict = 5)
     @org.jetbrains.annotations.Nullable()
     public abstract java.lang.Object insertCall(@org.jetbrains.annotations.NotNull()
     com.grabacionllamada.app.data.local.CallEntity call, @org.jetbrains.annotations.NotNull()

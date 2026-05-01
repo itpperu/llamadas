@@ -72,7 +72,20 @@
 - [x] Procedimientos de soporte (OPERATIONS.md completo)
 - [ ] Logging en Android (pendiente: requiere acceso al celular)
 
+### Fase 7 - Implementación en producción (iniciada 2026-04-25)
+- [x] Deploy backend Laravel en servidor Linux (161.97.71.74) vía Docker
+- [x] Deploy servicio Python-AI con Supervisor
+- [x] Configurar Nginx del servidor como proxy reverso al subdominio llamadas.innovationtechnologyperu.com
+- [x] Activar HTTPS con Certbot (Let's Encrypt)
+- [x] App Android compilada y desplegada en Xiaomi Redmi 14 Pro
+- [x] Call Up instalado como grabador de llamadas (Music/CallAppRecording)
+- [x] Detección automática de llamadas vía TelephonyCallback (CallMonitorService)
+- [x] Detección automática del archivo de audio (RecordingFinder → Music/CallAppRecording)
+- [x] Compresión de audio pre-upload (AudioCompressor — solo archivos > 1MB)
+- [x] Limpieza automática del archivo local tras subida exitosa
+- [ ] **PENDIENTE: Subida automática de audio sin intervención del vendedor** — el RecordingFinder encuentra el archivo correctamente pero el SyncAudioWorker se cancela antes de completar la subida. Se requiere depuración adicional del ciclo de vida del WorkManager en HyperOS.
+
 ## Prioridad actual
-1. Validar flujo E2E completo con dispositivo real
-2. Documentar modelo de celular corporativo (Fase 0 pendiente)
-3. Mejorar logging en app Android
+1. Resolver subida automática de audio (SyncAudioWorker cancelado en HyperOS)
+2. Documentar modelo de celular corporativo — Xiaomi Redmi 14 Pro (HyperOS 2.0, Android 16)
+3. Validar flujo E2E completo con llamada real de producción

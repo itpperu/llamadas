@@ -46,7 +46,7 @@ public final class CallDao_Impl implements CallDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `calls` (`id`,`telefonoCliente`,`tipo`,`fechaInicio`,`fechaFin`,`duracionSegundos`,`isMetadataSynced`,`isAudioSynced`,`audioPath`,`backendCallId`) VALUES (nullif(?, 0),?,?,?,?,?,?,?,?,?)";
+        return "INSERT OR IGNORE INTO `calls` (`id`,`telefonoCliente`,`tipo`,`fechaInicio`,`fechaFin`,`duracionSegundos`,`isMetadataSynced`,`isAudioSynced`,`audioPath`,`backendCallId`) VALUES (nullif(?, 0),?,?,?,?,?,?,?,?,?)";
       }
 
       @Override

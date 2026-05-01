@@ -13,6 +13,7 @@ import androidx.work.WorkerParameters
 import com.grabacionllamada.app.GrabacionApp
 import com.grabacionllamada.app.data.api.RetrofitClient
 import com.grabacionllamada.app.data.local.AppDatabase
+import com.grabacionllamada.app.utils.AudioCompressor
 import com.grabacionllamada.app.utils.SessionManager
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -42,6 +43,9 @@ class SyncAudioWorker(
     }
 
     override suspend fun doWork(): Result {
+        runCatching { setForeground(getForegroundInfo()) }
+            .onFailure { Log.w("SyncAudioWorker", "No se pudo promover a foreground: ${it.message}") }
+
         val sessionManager = SessionManager(applicationContext)
         if (!sessionManager.isLoggedIn()) {
             Log.w("SyncAudioWorker", "No hay sesión activa. Cancelando Worker de Audio.")
@@ -108,18 +112,22 @@ class SyncAudioWorker(
                     continue
                 }
 
-                Log.i("SyncAudioWorker", "Archivo listo: ${tempFile.name} (${tempFile.length()/1024}KB)")
+                // Comprimir si el archivo supera 1MB
+                val uploadPath = AudioCompressor.compress(applicationContext, tempFile.absolutePath)
+                val uploadFile = File(uploadPath)
+                Log.i("SyncAudioWorker", "Archivo listo: ${uploadFile.name} (${uploadFile.length()/1024}KB)")
 
                 Log.d("SyncAudioWorker", "Subiendo audio para llamada remota ID: $backendId (${tempFile.length()/1024}KB)...")
                 
                 // Calcular MD5 real del archivo para validación del servidor
                 val md5Hash = java.security.MessageDigest.getInstance("MD5")
-                    .digest(tempFile.readBytes())
+                    .digest(uploadFile.readBytes())
                     .joinToString("") { "%02x".format(it) }
                 Log.d("SyncAudioWorker", "MD5: $md5Hash")
 
-                val reqFile = tempFile.asRequestBody(mimeTypeString.toMediaTypeOrNull())
-                val multipartBody = MultipartBody.Part.createFormData("audio_file", tempFile.name, reqFile)
+                val uploadMime = if (uploadPath.endsWith(".m4a")) "audio/m4a" else mimeTypeString
+                val reqFile = uploadFile.asRequestBody(uploadMime.toMediaTypeOrNull())
+                val multipartBody = MultipartBody.Part.createFormData("audio_file", uploadFile.name, reqFile)
                 val hashBody = md5Hash.toRequestBody("text/plain".toMediaTypeOrNull())
                 val mimeBody = mimeTypeString.toRequestBody("text/plain".toMediaTypeOrNull())
                 val sourceModeBody = "manual".toRequestBody("text/plain".toMediaTypeOrNull())
@@ -136,6 +144,16 @@ class SyncAudioWorker(
                     Log.i("SyncAudioWorker", "Audio sincronizado con éxito para llamada ID remoto $backendId")
                     val updatedCall = call.copy(isAudioSynced = true)
                     callDao.updateCall(updatedCall)
+
+                    // Eliminar archivos locales para liberar espacio en Call Up
+                    tempFile.delete()
+                    if (uploadPath != tempFile.absolutePath) File(uploadPath).delete()
+                    // Eliminar el archivo original de Call Up si es accesible
+                    val originalFile = if (audioPath.startsWith("file://")) File(audioPath.removePrefix("file://")) else null
+                    if (originalFile?.exists() == true) {
+                        originalFile.delete()
+                        Log.i("SyncAudioWorker", "Archivo original eliminado de Call Up: ${originalFile.name}")
+                    }
                 } else {
                     val code = response.code()
                     when (code) {
@@ -154,6 +172,9 @@ class SyncAudioWorker(
                 // Limpiar caché
                 tempFile.delete()
 
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                Log.w("SyncAudioWorker", "Worker cancelado por el sistema")
+                throw e
             } catch (e: java.io.FileNotFoundException) {
                 Log.e("SyncAudioWorker", "Archivo no encontrado o borrado para llamada ID local ${call.id}. Revirtiendo a pendiente. Detalle: ${e.message}")
                 val revertedCall = call.copy(audioPath = null)

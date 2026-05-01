@@ -85,21 +85,36 @@ Rutas web protegidas por middleware `auth`:
 
 **Ruta `/settings` registrada y funcional** bajo el grupo `prefix('settings')` con middleware `auth` en `web.php`.
 
-## 6. Pendientes Críticos para Piloto
+## 6. Estado de implementación en producción (2026-04-25/27)
 
-### Panel Web
-Todos los pendientes del panel web están resueltos:
-- [x] Ruta `/settings` registrada en `web.php`
-- [x] DataTables en reportes y vendedores
-- [x] Exportación a Excel en listados
-- [x] Loader + deshabilitar botón en llamadas AJAX
+### Servidor
+- URL: https://llamadas.innovationtechnologyperu.com
+- IP: 161.97.71.74 | Usuario: root
+- Backend Docker corriendo (laravel_app, laravel_worker, laravel_nginx, laravel_mysql)
+- Python-AI corriendo bajo Supervisor en puerto 8001
+- HTTPS activo con Certbot
+- Tabla `cache` faltaba — corregido con `CACHE_STORE=file` en `.env`
 
-### Validación (bloqueantes reales)
-1. Confirmar modelo exacto del celular corporativo (Fase 0 nunca completada formalmente)
-2. Ejecutar flujo E2E completo con dispositivo real
-3. Validar que FFmpeg está instalado en el equipo donde corre Python-AI
-4. Agregar logging detallado en Android (requiere acceso físico al equipo)
+### Dispositivo corporativo
+- Modelo: Xiaomi Redmi 14 Pro
+- OS: HyperOS 2.0 (Android API 36)
+- Grabador: **Call Up** (archivos en `Music/CallAppRecording`, formato MP3)
+- UUID registrado en el sistema
+
+### Flujo validado en producción
+- [x] Detección de llamadas vía TelephonyCallback (CallMonitorService foreground)
+- [x] Lectura de CallLog y registro local/remoto
+- [x] RecordingFinder encuentra automáticamente archivos de Call Up
+- [x] Análisis de IA ejecutándose tras subida de audio
+- [x] Panel web muestra llamadas con transcript y análisis
+
+### Pendiente crítico
+- [ ] **Subida automática de audio sin intervención del vendedor**
+  - El RecordingFinder encuentra el archivo correctamente (logs confirmados)
+  - El SyncAudioWorker se cancela durante el proceso en HyperOS
+  - `withContext(NonCancellable)` aplicado pero pendiente validación
+  - **Workaround actual:** el vendedor usa el botón "Asociar" en la pestaña Log para subir manualmente
 
 ### Limpieza completada
-- [x] `services/ai-worker/` eliminada — solo existe `services/python-ai/` como servicio IA activo.
-- [x] `backend_tmp/` eliminada el 2026-04-24 — era scaffold vacío de Laravel 8.75 sin código propio ni referencia en ningún flujo.
+- [x] `services/ai-worker/` eliminada
+- [x] `backend_tmp/` eliminada (2026-04-24)

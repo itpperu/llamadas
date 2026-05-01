@@ -18,7 +18,9 @@ import com.grabacionllamada.app.data.local.AppDatabase
 import com.grabacionllamada.app.utils.RecordingFinder
 import com.grabacionllamada.app.utils.SessionManager
 import com.grabacionllamada.app.utils.WorkerUtils
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 class SyncCallWorker(
     appContext: Context,
@@ -41,6 +43,9 @@ class SyncCallWorker(
     }
 
     override suspend fun doWork(): Result {
+        runCatching { setForeground(getForegroundInfo()) }
+            .onFailure { Log.w("SyncCallWorker", "No se pudo promover a foreground: ${it.message}") }
+
         val sessionManager = SessionManager(applicationContext)
         if (!sessionManager.isLoggedIn()) {
             Log.w("SyncCallWorker", "No hay sesión activa. Cancelando Worker.")
@@ -97,11 +102,13 @@ class SyncCallWorker(
                     } catch (e: Exception) { System.currentTimeMillis() }
 
                     var recordingUri: android.net.Uri? = null
-                    val delays = listOf(8_000L, 15_000L, 30_000L) // 3 intentos: 8s, 15s, 30s
+                    val delays = listOf(8_000L, 15_000L, 30_000L)
+                    var accumulated = 0L
 
                     for (waitMs in delays) {
                         delay(waitMs)
-                        Log.d("SyncCallWorker", "Buscando grabación (espera acumulada ${delays.take(delays.indexOf(waitMs) + 1).sum() / 1000}s)...")
+                        accumulated += waitMs
+                        Log.d("SyncCallWorker", "Buscando grabación (${accumulated/1000}s tras fin llamada) — fechaFin: ${call.fechaFin} — callEndMillis: ${java.util.Date(callEndMillis)}")
                         recordingUri = RecordingFinder.findRecording(
                             applicationContext, callEndMillis,
                             call.duracionSegundos, call.telefonoCliente
@@ -110,11 +117,16 @@ class SyncCallWorker(
                     }
 
                     if (recordingUri != null) {
-                        Log.i("SyncCallWorker", "Grabación encontrada automáticamente. Encolando subida.")
-                        callDao.updateCall(
-                            callDao.getCallById(call.id)!!.copy(audioPath = recordingUri.toString())
-                        )
-                        WorkerUtils.enqueueSyncAudio(applicationContext)
+                        Log.i("SyncCallWorker", "Grabación encontrada. Guardando y encolando subida.")
+                        // NonCancellable garantiza que el update y el enqueue completen
+                        // aunque el worker esté siendo cancelado por el sistema
+                        withContext(NonCancellable) {
+                            callDao.updateCall(
+                                callDao.getCallById(call.id)!!.copy(audioPath = recordingUri.toString())
+                            )
+                            WorkerUtils.enqueueSyncAudio(applicationContext)
+                        }
+                        Log.i("SyncCallWorker", "Audio encolado correctamente.")
                     } else {
                         Log.w("SyncCallWorker", "Grabación no encontrada tras 3 intentos. Asociación manual requerida.")
                     }
@@ -140,8 +152,11 @@ class SyncCallWorker(
                         }
                     }
                 }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                Log.w("SyncCallWorker", "Worker cancelado por el sistema — re-lanzando para que WorkManager lo maneje")
+                throw e  // NO capturar CancellationException — WorkManager necesita propagarla
             } catch (e: Exception) {
-                Log.e("SyncCallWorker", "Excepción de Red/Transitoria sincronizando llamada ID ${call.id}: ${e.message}. Reintento transitorio.")
+                Log.e("SyncCallWorker", "Excepción sincronizando llamada ID ${call.id}: ${e.message}. Reintento transitorio.")
                 hasFailures = true
             }
         }
