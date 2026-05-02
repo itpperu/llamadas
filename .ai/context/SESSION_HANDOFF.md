@@ -85,13 +85,14 @@ Rutas web protegidas por middleware `auth`:
 
 **Ruta `/settings` registrada y funcional** bajo el grupo `prefix('settings')` con middleware `auth` en `web.php`.
 
-## 6. Estado de implementación en producción (2026-04-25/27)
+## 6. Estado de implementación en producción (2026-04-25 → 2026-05-01)
 
 ### Servidor
 - URL: https://llamadas.innovationtechnologyperu.com
-- IP: 161.97.71.74 | Usuario: root
+- IP: 161.97.71.74 | Usuario: root | Path: `/var/www/grabacion_llamada`
 - Backend Docker corriendo (laravel_app, laravel_worker, laravel_nginx, laravel_mysql)
-- Python-AI corriendo bajo Supervisor en puerto 8001
+- Python-AI corriendo bajo Supervisor en puerto 8001 (`/etc/supervisor/conf.d/python-ai.conf`)
+- Logs Python-AI: `/var/log/supervisor/python-ai.{out,err}.log`
 - HTTPS activo con Certbot
 - Tabla `cache` faltaba — corregido con `CACHE_STORE=file` en `.env`
 
@@ -101,20 +102,42 @@ Rutas web protegidas por middleware `auth`:
 - Grabador: **Call Up** (archivos en `Music/CallAppRecording`, formato MP3)
 - UUID registrado en el sistema
 
-### Flujo validado en producción
+### Flujo E2E validado en producción (2026-05-01, llamada ID remoto 47)
 - [x] Detección de llamadas vía TelephonyCallback (CallMonitorService foreground)
 - [x] Lectura de CallLog y registro local/remoto
 - [x] RecordingFinder encuentra automáticamente archivos de Call Up
-- [x] Análisis de IA ejecutándose tras subida de audio
+- [x] **Subida automática de audio sin intervención del vendedor** ✅ RESUELTO 2026-05-01
+- [x] Análisis IA con transcripción en español coherente ✅ RESUELTO 2026-05-01
 - [x] Panel web muestra llamadas con transcript y análisis
 
-### Pendiente crítico
-- [ ] **Subida automática de audio sin intervención del vendedor**
-  - El RecordingFinder encuentra el archivo correctamente (logs confirmados)
-  - El SyncAudioWorker se cancela durante el proceso en HyperOS
-  - `withContext(NonCancellable)` aplicado pero pendiente validación
-  - **Workaround actual:** el vendedor usa el botón "Asociar" en la pestaña Log para subir manualmente
+## 7. Cambios aplicados en sesión 2026-05-01 (referencia para próximo agente)
 
-### Limpieza completada
+### Android
+- `android-app/app/src/main/java/com/grabacionllamada/app/workers/SyncCallWorker.kt:46-47` — `setForeground(getForegroundInfo())` al inicio de `doWork()`.
+- `android-app/app/src/main/java/com/grabacionllamada/app/workers/SyncAudioWorker.kt:46-47` — mismo patrón.
+- `android-app/app/src/main/AndroidManifest.xml:3` — añadido `xmlns:tools`.
+- `android-app/app/src/main/AndroidManifest.xml:73-79` — re-declaración de `androidx.work.impl.foreground.SystemForegroundService` con `foregroundServiceType="dataSync"` y `tools:node="merge"`.
+
+### Python-AI
+- `services/python-ai/app/main.py:11` — modelo `tiny` → `base`.
+- `services/python-ai/app/services/transcription.py:18-31` — `language="es"`, `task="transcribe"`, `initial_prompt`, `temperature=0.0`, `condition_on_previous_text=False`, `no_speech_threshold=0.6`, `compression_ratio_threshold=2.4`, `logprob_threshold=-1.0`.
+
+### Operación en producción
+- En servidor: `git reset --hard origin/main` para descartar commit local "cambios .env" que solo arrastraba runtime/cache de Laravel.
+- Backups creados: `backend/.env.backup-20260501-2209` y `backend/storage/app/audios.backup-20260501-2209`.
+- `supervisorctl restart python-ai` aplicó los cambios Python; primer arranque tardó ~30 s descargando modelo `base`.
+
+## 8. Pendientes documentados (no urgentes pero conviene atacar pronto)
+
+Ver detalle en `KNOWN_ISSUES.md`:
+- **KI-013** — Puerto 8001 expuesto a internet. Restringir a localhost o UFW.
+- **KI-014** — `.gitignore` del backend trackea runtime/.env/audios. Limpiar destrackeando con `git rm --cached`.
+
+Ver `TASKS.md` Fase 8 para roadmap de endurecimiento.
+
+### Mejoras opcionales evaluadas pero no aplicadas
+- Subir Whisper a `small`: el servidor tiene RAM (~3.6 GB libres, `small` ocupa ~1 GB). Cambio de una palabra en `main.py:11`. Solo aplicar si las alucinaciones residuales tipo "Punan" se vuelven problemáticas en operación real.
+
+### Limpieza completada (sesiones previas)
 - [x] `services/ai-worker/` eliminada
 - [x] `backend_tmp/` eliminada (2026-04-24)

@@ -3,13 +3,13 @@
 ## Roadmap del proyecto
 
 ### Fase 0 - Descubrimiento técnico del equipo
-- [ ] Confirmar modelo exacto del celular corporativo
-- [ ] Confirmar versión Android
+- [x] Confirmar modelo exacto del celular corporativo (Xiaomi Redmi 14 Pro)
+- [x] Confirmar versión Android (HyperOS 2.0 / Android 16 / API 36)
 - [x] Validar acceso a call log (CallLogReader.kt implementado)
-- [x] Validar disponibilidad de grabación nativa (flujo asistido SAF adoptado)
-- [x] Detectar ruta o mecanismo de acceso a la grabación (decisión: selector de archivos SAF)
-- [x] Probar asociación llamada ↔ audio (flujo asistido implementado en SyncAudioWorker.kt)
-- [ ] Documentar resultados técnicos del modelo específico
+- [x] Validar disponibilidad de grabación nativa (Call Up adoptado — D-012)
+- [x] Detectar ruta o mecanismo de acceso a la grabación (`/storage/emulated/0/Music/CallAppRecording`)
+- [x] Probar asociación llamada ↔ audio (RecordingFinder.kt automático por número + ventana de tiempo)
+- [x] Documentar resultados técnicos del modelo específico (DECISIONS.md D-012, KI-011)
 
 ### Fase 1 - Base Android MVP
 - [x] Crear proyecto Android Studio (com.grabacionllamada.app)
@@ -72,7 +72,7 @@
 - [x] Procedimientos de soporte (OPERATIONS.md completo)
 - [ ] Logging en Android (pendiente: requiere acceso al celular)
 
-### Fase 7 - Implementación en producción (iniciada 2026-04-25)
+### Fase 7 - Implementación en producción (iniciada 2026-04-25, cerrada 2026-05-01)
 - [x] Deploy backend Laravel en servidor Linux (161.97.71.74) vía Docker
 - [x] Deploy servicio Python-AI con Supervisor
 - [x] Configurar Nginx del servidor como proxy reverso al subdominio llamadas.innovationtechnologyperu.com
@@ -83,9 +83,15 @@
 - [x] Detección automática del archivo de audio (RecordingFinder → Music/CallAppRecording)
 - [x] Compresión de audio pre-upload (AudioCompressor — solo archivos > 1MB)
 - [x] Limpieza automática del archivo local tras subida exitosa
-- [ ] **PENDIENTE: Subida automática de audio sin intervención del vendedor** — el RecordingFinder encuentra el archivo correctamente pero el SyncAudioWorker se cancela antes de completar la subida. Se requiere depuración adicional del ciclo de vida del WorkManager en HyperOS.
+- [x] **Subida automática de audio sin intervención del vendedor** — resuelto 2026-05-01 (KI-011, D-015): `setForeground` explícito + re-declaración de `SystemForegroundService` en manifest. Validado E2E con llamada ID 47.
+- [x] Transcripción IA en español coherente — resuelto 2026-05-01 (KI-012, D-016): Whisper `base` + `language="es"` + parámetros anti-alucinación.
+
+### Fase 8 - Endurecimiento de producción (pendiente)
+- [ ] Restringir puerto 8001 (Python-AI) a localhost o vía UFW (KI-013)
+- [ ] Limpiar `.gitignore` del backend para destrackear `storage/`, `bootstrap/cache/`, `.env`, audios (KI-014)
+- [ ] Logging técnico en Android (Timber + envío opcional al backend)
+- [ ] Evaluar subida de Whisper a `small` si las alucinaciones residuales molestan en operación real
+- [ ] Documentar procedimiento de instalación de Call Up en nuevos dispositivos del piloto
 
 ## Prioridad actual
-1. Resolver subida automática de audio (SyncAudioWorker cancelado en HyperOS)
-2. Documentar modelo de celular corporativo — Xiaomi Redmi 14 Pro (HyperOS 2.0, Android 16)
-3. Validar flujo E2E completo con llamada real de producción
+Sprint 4 cerrado. Próximo sprint: Fase 8 (endurecimiento) cuando el negocio confirme.

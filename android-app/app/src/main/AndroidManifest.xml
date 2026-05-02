@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.grabacionllamada.app">
 
     <!-- Permisos Esenciales MVP Estrictos -->
@@ -71,6 +72,14 @@
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+
+        <!-- Re-declaracion del servicio interno de WorkManager para permitirle correr
+             como foreground service con type dataSync. Sin esto, setForeground() en
+             un Worker crashea con IllegalArgumentException en Android 14+. -->
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
 
     </application>
 </manifest>
