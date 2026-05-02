@@ -8,7 +8,7 @@ from app.services.analyser import AnalyserService
 app = FastAPI(title="Python AI Worker", version="1.0")
 
 # Inicializar servicios (Singleton style)
-whisper_service = TranscriptionService(model_name="tiny") # Tiny para que cargue rápido en el MVP
+whisper_service = TranscriptionService(model_name="base") # Base: mejor accuracy que tiny en español, sigue rápido en CPU
 analyser_service = AnalyserService()
 
 def map_dockered_path(provided_path: str) -> str:

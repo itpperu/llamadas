@@ -14,13 +14,19 @@ class TranscriptionService:
             raise FileNotFoundError(f"Audio no encontrado en la ruta: {audio_path}")
 
         print(f"Transcribiendo audio: {audio_path}")
-        # Forzamos idioma español para evitar que el modelo tiny detecte mal el idioma
-        # y produzca caracteres extraños (chino/japonés/holandés) con audios cortos o ruidosos.
+        # language="es" evita que detecte mal el idioma en audios ruidosos.
+        # Los thresholds y temperature=0 reducen alucinaciones en clips cortos
+        # (por ejemplo, "Suscríbete al canal" o frases random sin relación al audio).
         result = self.model.transcribe(
             audio_path,
             fp16=torch.cuda.is_available(),
             language="es",
             task="transcribe",
-            initial_prompt="Transcripcion de llamada comercial en espanol, Peru."
+            initial_prompt="Transcripcion de llamada comercial en espanol, Peru.",
+            temperature=0.0,
+            condition_on_previous_text=False,
+            no_speech_threshold=0.6,
+            compression_ratio_threshold=2.4,
+            logprob_threshold=-1.0
         )
         return result["text"].strip()
